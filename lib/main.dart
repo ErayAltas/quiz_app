@@ -10,11 +10,7 @@ import 'package:quiz_app/presentation/auth/sign_in/sign_in.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  } catch (e) {
-    //pass
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -30,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(primarySwatch: Colors.green),
+          theme: ThemeData(primarySwatch: Colors.purple),
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.userChanges(),
               builder: (context, snapshot) {
