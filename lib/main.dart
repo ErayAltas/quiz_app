@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(primarySwatch: Colors.purple),
+          themeMode: ThemeMode.dark,
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.userChanges(),
               builder: (context, snapshot) {

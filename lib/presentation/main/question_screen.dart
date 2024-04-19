@@ -6,7 +6,6 @@ import 'package:quiz_app/bloc/quiz/quiz_state.dart';
 import 'package:quiz_app/presentation/main/result_detail_screen.dart';
 import 'package:quiz_app/utility/category_detail_list.dart';
 import 'package:quiz_app/utility/prepare_quiz.dart';
-import 'package:quiz_app/widgets/close_button.dart';
 import 'package:quiz_app/widgets/option_widget.dart';
 
 class QuestionsScreen extends StatefulWidget {
@@ -21,43 +20,39 @@ class QuestionsScreen extends StatefulWidget {
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
+  PrepareQuiz quizMaker = PrepareQuiz();
+  int questionNumber = 0;
+  bool isAbsorbing = false;
+  final int duration = 10;
+  List<Color> optionColor = [Colors.white, Colors.white, Colors.white, Colors.white];
+  int selectedOption = 0;
+
   @override
   void initState() {
     super.initState();
     quizMaker.populateList(widget.questionData);
   }
 
-  PrepareQuiz quizMaker = PrepareQuiz();
-  int questionNumber = 0;
-
-  bool isAbsorbing = false;
-
-  final int duration = 10;
-
-  List<Color> optionColor = [Colors.white, Colors.white, Colors.white, Colors.white];
-
-  int selectedOption = 0;
-
   List<Widget> buildOptions(List<String> options) {
-    // List<String> options = quizMaker.getOptions(i);
-
     List<Widget> optionsWidget = [];
-
     for (int j = 0; j < 4; j++) {
-      optionsWidget.add(OptionWidget(
-        widget: widget,
-        option: options[j],
-        optionColor: optionColor[j],
-        onTap: () async {
-          setState(() {
-            if (selectedOption != -1) {
-              optionColor[selectedOption] = Colors.white;
-            }
-            selectedOption = j;
-            optionColor[selectedOption] = Colors.greenAccent;
-          });
-          // await Future.delayed(const Duration(seconds: 1, milliseconds: 30), () {});
-        },
+      optionsWidget.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: OptionWidget(
+          widget: widget,
+          option: options[j],
+          optionColor: optionColor[j],
+          onTap: () async {
+            setState(() {
+              if (selectedOption != -1) {
+                optionColor[selectedOption] = Colors.white;
+              }
+              selectedOption = j;
+              optionColor[selectedOption] = Colors.greenAccent;
+            });
+            // await Future.delayed(const Duration(seconds: 1, milliseconds: 30), () {});
+          },
+        ),
       ));
     }
     return optionsWidget;
@@ -87,69 +82,43 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                     child: Scaffold(
                       backgroundColor: Colors.transparent,
                       body: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RoundCloseButton(),
+                              Text(
+                                '${(state.currentIndex + 1).toString()} of 10',
+                                style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 20),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                state.currentQuestion,
+                                style: const TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
-                          // ignore: prefer_const_constructors
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${(state.currentIndex + 1).toString()} of 10',
-                                  style: TextStyle(
-                                    color: Colors.white.withOpacity(0.6),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  state.currentQuestion,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          const SizedBox(height: 20),
                           ...buildOptions(state.options),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () => _navigateToResultScreen(context, state),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orangeAccent,
-                                  minimumSize: const Size(100, 40), //////// HERE
-                                ),
-                                child: const Text('Finish'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (state.currentIndex < 9) {
-                                    if (selectedOption != -1) optionColor[selectedOption] = Colors.white;
-                                    int selectedIndex = selectedOption;
-                                    selectedOption = -1;
-                                    BlocProvider.of<QuizBloc>(context).add(NextQuestion(selectedIndex));
-                                  } else {
-                                    BlocProvider.of<QuizBloc>(context).add(QuizFinished(selectedOption));
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blueAccent,
-                                  minimumSize: const Size(100, 40), //////// HERE
-                                ),
-                                child: const Text('Next'),
-                              ),
-                            ],
+                          const SizedBox(height: 40),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (state.currentIndex < 9) {
+                                if (selectedOption != -1) optionColor[selectedOption] = Colors.white;
+                                int selectedIndex = selectedOption;
+                                selectedOption = -1;
+                                BlocProvider.of<QuizBloc>(context).add(NextQuestion(selectedIndex));
+                              } else {
+                                BlocProvider.of<QuizBloc>(context).add(QuizFinished(selectedOption));
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              minimumSize: const Size.fromHeight(45),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            child: const Text('Next', style: TextStyle(color: Colors.white, fontSize: 18)),
                           ),
                         ],
                       ),

@@ -30,14 +30,10 @@ class ResultDetailScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${categoryDetailList[categoryIndex].title}: ${difficultyLevel.toString()}',
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w300,
-                color: Colors.white,
-              ),
+              '${categoryDetailList[categoryIndex].title} - ${difficultyLevel.toString()}',
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300, color: Colors.white),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             IconScoreBar(
               scoreIcon: Icons.star_rounded,
               iconColor: Colors.yellow,
@@ -45,7 +41,7 @@ class ResultDetailScreen extends StatelessWidget {
               maxScore: 5,
               readOnly: true,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Text(
               'Final score is ${score.toString()}',
               style: const TextStyle(
@@ -81,7 +77,7 @@ class ResultDetailScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -91,20 +87,12 @@ class ResultDetailScreen extends StatelessWidget {
                 height: 0.08 * MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(1, 3),
-                      blurRadius: 0.7,
-                      color: Colors.grey.withOpacity(0.8),
-                    ),
+                    BoxShadow(offset: const Offset(1, 3), blurRadius: 0.7, color: Colors.grey.withOpacity(0.8)),
                   ],
                 ),
-                child: Icon(
-                  Icons.check,
-                  color: categoryDetailList[categoryIndex].textColor,
-                  size: 30,
-                ),
+                child: Icon(Icons.check, color: categoryDetailList[categoryIndex].textColor, size: 36),
               ),
             ),
           ],

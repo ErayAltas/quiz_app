@@ -1,5 +1,6 @@
-import 'package:quiz_app/bloc/difficulty_level/difficulty_level_state.dart';
 import 'package:bloc/bloc.dart';
+import 'package:quiz_app/bloc/difficulty_level/difficulty_level_state.dart';
+
 import '../../utility/category_detail_list.dart';
 import 'difficulty_level_event.dart';
 

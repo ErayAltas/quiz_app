@@ -12,20 +12,12 @@ class Categories extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
-        child: Container(
-          margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 10),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Categories',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 5),
+              const Text('Categories', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
               ListView.builder(
                 itemCount: categoryDetailList.length,
                 physics: const NeverScrollableScrollPhysics(),

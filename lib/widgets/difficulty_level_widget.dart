@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app/bloc/difficulty_level/difficulty_level_bloc.dart';
+import 'package:quiz_app/bloc/difficulty_level/difficulty_level_event.dart';
 import 'package:quiz_app/utility/category_detail_list.dart';
 
-import '../bloc/difficulty_level/difficulty_level_bloc.dart';
-import '../bloc/difficulty_level/difficulty_level_event.dart';
-
 class DifficultyLevelWidget extends StatelessWidget {
-  DifficultyLevelWidget({
-    super.key,
-    required this.selectedIndex,
-    required this.difficulty,
-  });
-
+  DifficultyLevelWidget({super.key, required this.selectedIndex, required this.difficulty});
   final int selectedIndex;
   final int difficulty;
-
   final List<String> level = ['Easy', 'Medium', 'Hard'];
   final List<String> levelLowercase = ['easy', 'medium', 'hard'];
 
@@ -31,17 +24,11 @@ class DifficultyLevelWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: categoryDetailList[selectedIndex].textColor,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.white,
-          ),
+          border: Border.all(color: Colors.white),
         ),
         child: Text(
           level[difficulty],
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
     );
