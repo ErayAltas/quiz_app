@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app/bloc/auth/auth_bloc.dart';
+import 'package:quiz_app/presentation/auth/sign_in/sign_in.dart';
 import 'package:quiz_app/presentation/dashboard/result/results_screen.dart';
+import 'package:quiz_app/presentation/profile/profile.dart';
 
-import '../../bloc/auth/auth_bloc.dart';
-import '../Profile/profile.dart';
-import '../auth/sign_in/sign_in.dart';
 import 'categories/categories_screen.dart';
 
 class Dashboard extends StatelessWidget {
@@ -67,7 +67,7 @@ class Dashboard extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(PageRouteBuilder(
                     pageBuilder: (BuildContext context, _, __) {
-                      return Profile();
+                      return const Profile();
                     },
                     transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
                       return FadeTransition(opacity: animation, child: child);
@@ -115,7 +115,6 @@ class Dashboard extends StatelessWidget {
           body: BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is UnAuthenticated) {
-                // Navigate to the sign in screen when the user Signs Out
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const SignIn()),
                   (route) => false,
