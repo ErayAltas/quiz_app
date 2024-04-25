@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_builder.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:quiz_app/bloc/auth/auth_bloc.dart';
 import 'package:quiz_app/presentation/Dashboard/dashboard.dart';
 import 'package:quiz_app/presentation/auth/sign_up/sign_up.dart';
@@ -32,7 +30,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("BLoC Quiz"),
+        title: const Text("Quiz App"),
         backgroundColor: Colors.green,
       ),
       body: BlocListener<AuthBloc, AuthState>(
@@ -91,54 +89,35 @@ class _SignInState extends State<SignIn> {
                                     return value != null && !EmailValidator.validate(value) ? 'Enter a valid email' : null;
                                   },
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                const SizedBox(height: 10),
                                 TextFormField(
                                   keyboardType: TextInputType.text,
                                   controller: _passwordController,
-                                  decoration: const InputDecoration(
-                                    hintText: "Password",
-                                    border: OutlineInputBorder(),
-                                  ),
+                                  decoration: const InputDecoration(hintText: "Password", border: OutlineInputBorder()),
+                                  obscureText: true,
                                   autovalidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     return value != null && value.length < 6 ? "Enter min. 6 characters" : null;
                                   },
                                 ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
+                                const SizedBox(height: 40),
                                 SignInButtonBuilder(
                                   text: 'Sign in',
-                                  icon: Icons.email,
+                                  icon: Icons.login,
                                   onPressed: () {
                                     _authenticateWithEmailAndPassword(context);
                                   },
                                   backgroundColor: Colors.green,
-                                  width: 120,
+                                  width: 100,
+                                  height: 43,
                                 )
                               ],
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          "or",
-                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        SignInButton(
-                          Buttons.Google,
-                          text: "Sign in with Google",
-                          onPressed: () {
-                            _authenticateWithGoogle(context);
-                          },
-                        ),
+                        const SizedBox(height: 20),
+                        const Text("or", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 20),
                         SignInButtonBuilder(
                           text: "Don't have an account?",
                           onPressed: () {
@@ -168,11 +147,5 @@ class _SignInState extends State<SignIn> {
         SignInRequested(_emailController.text, _passwordController.text),
       );
     }
-  }
-
-  void _authenticateWithGoogle(context) {
-    BlocProvider.of<AuthBloc>(context).add(
-      GoogleSignInRequested(),
-    );
   }
 }

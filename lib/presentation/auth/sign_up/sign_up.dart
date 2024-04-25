@@ -2,8 +2,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_builder.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:quiz_app/bloc/auth/auth_bloc.dart';
 import 'package:quiz_app/presentation/auth/sign_in/sign_in.dart';
 import 'package:quiz_app/presentation/dashboard/dashboard.dart';
@@ -31,32 +29,21 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("BLoC Quiz"),
-        backgroundColor: Colors.green,
-      ),
+      appBar: AppBar(title: const Text("Quiz App"), backgroundColor: Colors.green),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
-            // Navigating to the dashboard screen if the user is authenticated
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => Dashboard(state.currentUser),
-              ),
-            );
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Dashboard(state.currentUser)));
           }
           if (state is AuthError) {
-            // Displaying the error message if the user is not authenticated
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
         builder: (context, state) {
           if (state is Loading) {
-            // Displaying the loading indicator while the user is signing up
             return const Center(child: CircularProgressIndicator());
           }
           if (state is UnAuthenticated) {
-            // Displaying the sign up form if the user is not authenticated
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -96,10 +83,8 @@ class _SignUpState extends State<SignUp> {
                               ),
                               TextFormField(
                                 controller: _emailController,
-                                decoration: const InputDecoration(
-                                  hintText: "Email",
-                                  border: OutlineInputBorder(),
-                                ),
+                                decoration: const InputDecoration(hintText: "Email", border: OutlineInputBorder()),
+                                keyboardType: TextInputType.emailAddress,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   return value != null && !EmailValidator.validate(value) ? 'Enter a valid email' : null;
@@ -110,26 +95,23 @@ class _SignUpState extends State<SignUp> {
                               ),
                               TextFormField(
                                 controller: _passwordController,
-                                decoration: const InputDecoration(
-                                  hintText: "Password",
-                                  border: OutlineInputBorder(),
-                                ),
+                                decoration: const InputDecoration(hintText: "Password", border: OutlineInputBorder()),
+                                obscureText: true,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   return value != null && value.length < 6 ? "Enter min. 6 characters" : null;
                                 },
                               ),
-                              const SizedBox(
-                                height: 12,
-                              ),
+                              const SizedBox(height: 40),
                               SignInButtonBuilder(
-                                icon: Icons.email,
+                                icon: Icons.login,
                                 text: "Sign up",
                                 onPressed: () {
                                   _createAccountWithEmailAndPassword(context);
                                 },
                                 backgroundColor: Colors.green,
-                                width: 130,
+                                width: 100,
+                                height: 43,
                               ),
                             ],
                           ),
@@ -138,20 +120,8 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(
                         height: 25,
                       ),
-                      const Text(
-                        "or",
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SignInButton(
-                        Buttons.Google,
-                        text: "Sign up with Google",
-                        onPressed: () {
-                          _authenticateWithGoogle(context);
-                        },
-                      ),
+                      const Text("or", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
+                      const SizedBox(height: 20),
                       SignInButtonBuilder(
                         text: 'Already have an account?',
                         onPressed: () {
@@ -162,9 +132,7 @@ class _SignUpState extends State<SignUp> {
                         },
                         backgroundColor: Colors.blueGrey[700]!,
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      const SizedBox(height: 5),
                     ],
                   ),
                 ),
@@ -187,11 +155,5 @@ class _SignUpState extends State<SignUp> {
         ),
       );
     }
-  }
-
-  void _authenticateWithGoogle(context) {
-    BlocProvider.of<AuthBloc>(context).add(
-      GoogleSignInRequested(),
-    );
   }
 }
