@@ -2,14 +2,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:quiz_app/bloc/results/results_bloc.dart';
 import 'package:quiz_app/bloc/results/results_event.dart';
 import 'package:quiz_app/bloc/results/results_state.dart';
-import 'package:quiz_app/presentation/dashboard/result/result_item.dart';
 import 'package:quiz_app/utility/category_detail_list.dart';
 
 class Results extends StatefulWidget {
@@ -31,150 +28,155 @@ class _ResultsState extends State<Results> {
   Widget build(BuildContext context) {
     selectedCategoryValue = '';
     selectedDifficultyLevelValue = '';
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BlocProvider(
-                create: (context) => ResultsBloc(),
-                child: BlocListener<ResultsBloc, ResultsState>(
-                  listener: (context, state) {
-                    if (state is Error) {
-                      showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('Error'),
-                          content: Text(state.error),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Ok'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  child: BlocBuilder<ResultsBloc, ResultsState>(builder: (context, state) {
-                    if (state is Success) {
-                      if (state.data == null) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Scores', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
-                            const SizedBox(height: 5),
-                            buildDropdownCategoryEmpty(state, context),
-                            const SizedBox(height: 5),
-                            buildDropdownDifficultyLevelEmpty(state, context),
-                          ],
-                        );
-                      } else if (state.data.docs.length > 0) {
-                        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          const Text('Scores', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
-                          const SizedBox(height: 5),
-                          buildDropdownCategory(state, context),
-                          const SizedBox(height: 5),
-                          buildDropdownDifficultyLevel(state, context),
-                          const SizedBox(height: 5),
-                          AspectRatio(
-                            aspectRatio: 1.70,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                right: 18,
-                                left: 0,
-                                top: 20,
-                                bottom: 0,
-                              ),
-                              child: LineChart(
-                                LineChartData(
-                                  borderData: FlBorderData(show: true, border: Border.all(color: Colors.grey)),
-                                  titlesData: FlTitlesData(
-                                    show: true,
-                                    bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  ),
-                                  minX: 1,
-                                  maxX: (state.data.docs.length * 1.0),
-                                  minY: -4,
-                                  maxY: 10,
-                                  lineBarsData: [
-                                    LineChartBarData(
-                                      spots: state.analysisData,
-                                      isCurved: true,
-                                      barWidth: 5,
-                                      isStrokeCapRound: true,
-                                      color: Colors.green,
-                                      gradient: LinearGradient(colors: gradientColors),
-                                      belowBarData: BarAreaData(
-                                        show: true,
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2)!.withOpacity(0.1),
-                                            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2)!.withOpacity(0.1),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SingleChildScrollView(
-                            physics: const ScrollPhysics(),
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ListView.builder(
-                                    itemCount: state.data!.docs.length,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return ResultItem(index, state.data!.docs[index]);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ]);
-                      } else {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Scores', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
-                            const SizedBox(height: 5),
-                            buildDropdownCategory(state, context),
-                            const SizedBox(height: 5),
-                            buildDropdownDifficultyLevel(state, context),
-                            const SizedBox(height: 100),
-                            const Text('Data Unavailable, Play some more games under this difficulty level :)', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: Colors.black)),
-                          ],
-                        );
-                      }
-                    }
-                    if (state is Error) {
-                      return const Text('Backend Error', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: Colors.black));
-                    }
-                    return Center(child: LoadingAnimationWidget.discreteCircle(color: Colors.orangeAccent, size: 50));
-                  }),
-                ),
-              )
-            ],
-          ),
-        ),
+    return const Scaffold(
+      body: Center(
+        child: Text('Results', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
       ),
     );
+    // return Scaffold(
+    //   backgroundColor: Colors.white,
+    //   body: SingleChildScrollView(
+    //     physics: const ScrollPhysics(),
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(10),
+    //       child: Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           BlocProvider(
+    //             create: (context) => ResultsBloc(),
+    //             child: BlocListener<ResultsBloc, ResultsState>(
+    //               listener: (context, state) {
+    //                 if (state is Error) {
+    //                   showDialog(
+    //                     context: context,
+    //                     builder: (_) => AlertDialog(
+    //                       title: const Text('Error'),
+    //                       content: Text(state.error),
+    //                       actions: [
+    //                         TextButton(
+    //                           onPressed: () {
+    //                             Navigator.pop(context);
+    //                           },
+    //                           child: const Text('Ok'),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   );
+    //                 }
+    //               },
+    //               child: BlocBuilder<ResultsBloc, ResultsState>(builder: (context, state) {
+    //                 if (state is Success) {
+    //                   if (state.data == null) {
+    //                     return Column(
+    //                       crossAxisAlignment: CrossAxisAlignment.start,
+    //                       children: [
+    //                         const Text('Scores', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
+    //                         const SizedBox(height: 5),
+    //                         buildDropdownCategoryEmpty(state, context),
+    //                         const SizedBox(height: 5),
+    //                         buildDropdownDifficultyLevelEmpty(state, context),
+    //                       ],
+    //                     );
+    //                   } else if (state.data.docs.length > 0) {
+    //                     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    //                       const Text('Scores', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
+    //                       const SizedBox(height: 5),
+    //                       buildDropdownCategory(state, context),
+    //                       const SizedBox(height: 5),
+    //                       buildDropdownDifficultyLevel(state, context),
+    //                       const SizedBox(height: 5),
+    //                       AspectRatio(
+    //                         aspectRatio: 1.70,
+    //                         child: Padding(
+    //                           padding: const EdgeInsets.only(
+    //                             right: 18,
+    //                             left: 0,
+    //                             top: 20,
+    //                             bottom: 0,
+    //                           ),
+    //                           child: LineChart(
+    //                             LineChartData(
+    //                               borderData: FlBorderData(show: true, border: Border.all(color: Colors.grey)),
+    //                               titlesData: FlTitlesData(
+    //                                 show: true,
+    //                                 bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    //                                 topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    //                                 rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    //                               ),
+    //                               minX: 1,
+    //                               maxX: (state.data.docs.length * 1.0),
+    //                               minY: -4,
+    //                               maxY: 10,
+    //                               lineBarsData: [
+    //                                 LineChartBarData(
+    //                                   spots: state.analysisData,
+    //                                   isCurved: true,
+    //                                   barWidth: 5,
+    //                                   isStrokeCapRound: true,
+    //                                   color: Colors.green,
+    //                                   gradient: LinearGradient(colors: gradientColors),
+    //                                   belowBarData: BarAreaData(
+    //                                     show: true,
+    //                                     gradient: LinearGradient(
+    //                                       colors: [
+    //                                         ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2)!.withOpacity(0.1),
+    //                                         ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2)!.withOpacity(0.1),
+    //                                       ],
+    //                                     ),
+    //                                   ),
+    //                                 )
+    //                               ],
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ),
+    //                       SingleChildScrollView(
+    //                         physics: const ScrollPhysics(),
+    //                         child: Container(
+    //                           margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+    //                           child: Column(
+    //                             crossAxisAlignment: CrossAxisAlignment.start,
+    //                             children: [
+    //                               ListView.builder(
+    //                                 itemCount: state.data!.docs.length,
+    //                                 physics: const NeverScrollableScrollPhysics(),
+    //                                 shrinkWrap: true,
+    //                                 itemBuilder: (context, index) {
+    //                                   return ResultItem(index, state.data!.docs[index]);
+    //                                 },
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ]);
+    //                   } else {
+    //                     return Column(
+    //                       crossAxisAlignment: CrossAxisAlignment.start,
+    //                       children: [
+    //                         const Text('Scores', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.black)),
+    //                         const SizedBox(height: 5),
+    //                         buildDropdownCategory(state, context),
+    //                         const SizedBox(height: 5),
+    //                         buildDropdownDifficultyLevel(state, context),
+    //                         const SizedBox(height: 100),
+    //                         const Text('Data Unavailable, Play some more games under this difficulty level :)', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: Colors.black)),
+    //                       ],
+    //                     );
+    //                   }
+    //                 }
+    //                 if (state is Error) {
+    //                   return const Text('Backend Error', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: Colors.black));
+    //                 }
+    //                 return Center(child: LoadingAnimationWidget.discreteCircle(color: Colors.orangeAccent, size: 50));
+    //               }),
+    //             ),
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   DropdownButtonFormField2<String> buildDropdownDifficultyLevel(Success state, BuildContext context) {

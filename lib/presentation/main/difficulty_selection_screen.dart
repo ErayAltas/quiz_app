@@ -24,25 +24,23 @@ class DifficultyScreen extends StatelessWidget {
         },
         child: BlocBuilder<DifficultyLevelBloc, DifficultyLevelState>(builder: (context, state) {
           if (state is LoadedState) {
-            return Container(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 20),
-              decoration: BoxDecoration(color: state.color),
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Column(
+            return Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Align(alignment: Alignment.centerLeft, child: RoundCloseButton()),
                     const SizedBox(height: 40),
                     Text(
                       state.title,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 35),
+                      style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 35),
                     ),
                     const SizedBox(height: 80),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Text('Select Difficulty', style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold)),
+                        const Text('Select Difficulty', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 20),
                         DifficultyLevelWidget(selectedIndex: categoryIndex, difficulty: 0),
                         const SizedBox(height: 20),

@@ -6,19 +6,14 @@ class RoundCloseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white),
       ),
       child: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
-        child: const Icon(
-          Icons.close_rounded,
-          color: Colors.white,
-          size: 30,
-        ),
+        child: const Icon(Icons.close_rounded, size: 30),
       ),
     );
   }

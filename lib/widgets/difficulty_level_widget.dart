@@ -22,13 +22,12 @@ class DifficultyLevelWidget extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: categoryDetailList[selectedIndex].textColor,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.white),
+          border: Border.all(color: categoryDetailList[selectedIndex].textColor),
         ),
         child: Text(
           level[difficulty],
-          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 25, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
     );
