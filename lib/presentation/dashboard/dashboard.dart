@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app/bloc/auth/auth_bloc.dart';
 import 'package:quiz_app/presentation/auth/sign_in/sign_in.dart';
+import 'package:quiz_app/presentation/create_question.dart';
 import 'package:quiz_app/presentation/dashboard/result/results_screen.dart';
 
 import 'categories/categories_screen.dart';
@@ -18,6 +19,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   List<Widget> screens = [
     const Categories(),
+    const CreateQuestionPage(),
     const Results(),
   ];
 
@@ -58,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Create Question'),
           BottomNavigationBarItem(icon: Icon(Icons.domain_verification), label: 'Results'),
         ],
         onTap: (value) {
